@@ -1,10 +1,40 @@
 package org.example;
 
+import java.text.ParseException;
+import java.util.List;
 import java.util.Objects;
 
 public class Main {
 
-    public static void main(String[] args) {
+    private enum Holidays {
+        NoHoliday, NewYear, WomenDay, DefendersDay
+    }
+
+    static String currentDate = "23/02";
+
+    public static void Greetings(List<Customer> clients) {
+        switch (currentDate) {
+            case "31/12" -> {
+                System.out.println("Поздравляем с праздником " + Holidays.values()[1] + " следующих покупателей:");
+                System.out.println(clients);
+            }
+            case "23/02" -> {
+                System.out.println("Поздравляем с праздником " + Holidays.values()[3] + " следующих покупателей:");
+                System.out.println(clients.stream()
+                        .filter(e -> e.getGender().equals(Customer.Gender.Male))
+                        .toList());
+            }
+            case "08/03" -> {
+                System.out.println("Поздравляем с праздником " + Holidays.values()[2] + " следующих покупателей:");
+                System.out.println(clients.stream()
+                        .filter(e -> e.getGender().equals(Customer.Gender.Female))
+                        .toList());
+            }
+            default -> System.out.println(Holidays.values()[0] + ", работаем как обычно");
+        }
+    }
+
+    public static void main(String[] args) throws ParseException {
         Customer ivan = new Customer("Иван", 23, "1523", Customer.Gender.values()[0]);
         Shop.customers.add(ivan);
         Customer maria = new Customer("Мария", 45, "4878", Customer.Gender.values()[1]);
@@ -32,5 +62,12 @@ public class Main {
 
         Shop.orders.removeIf(Objects::isNull);
         System.out.println("Итоговое кол-во сформированных заказов = " + Shop.orders.size());
+        System.out.println();
+
+        System.out.println("Сегодня " + currentDate);
+        Shop.customers.add(dmitry);
+        Customer anna = new Customer("Анна", 34, "5612", Customer.Gender.values()[1]);
+        Shop.customers.add(anna);
+        Greetings(Shop.customers);
     }
 }
